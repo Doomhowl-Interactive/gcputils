@@ -1,0 +1,11 @@
+// Configure plugin resolution to include Maven Local
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url "https://europe-west4-maven.pkg.dev/doomhowl-interactive/public"
+        }
+    }
+}
+
+rootProject.name = 'gcputils-example'

@@ -3,14 +3,13 @@ package com.doomhowl.gcputils
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 
 class GcpUtilsPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        // Register extension methods
-        RepositoryHandler.metaClass.doomhowlMaven = { ->
-            return owner.maven {
+        // Add an extension method to RepositoryHandler via the project
+        project.repositories.ext.doomhowlMaven = { ->
+            return project.repositories.maven {
                 url = project.uri("https://europe-west4-maven.pkg.dev/doomhowl-interactive/ndkports")
                 credentials {
                     username = "oauth2accesstoken"

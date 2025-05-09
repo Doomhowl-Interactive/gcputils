@@ -1,0 +1,29 @@
+plugins {
+    id 'groovy'
+    id 'com.doomhowl.gcputils' version '1.1-SNAPSHOT'
+}
+
+group = 'com.example'
+version = '0.1.0'
+
+repositories {
+    mavenCentral()
+    doomhowlMaven()
+}
+
+dependencies {
+    implementation 'org.apache.groovy:groovy:4.0.14'
+    implementation 'com.doomhowl:wolf:1.0.0-SNAPSHOT' // private dependency for testing
+}
+
+task printGcpToken {
+    doLast {
+        println "Retrieving GCP access token..."
+        try {
+            def token = com.doomhowl.gcputils.GcpUtilsPlugin.getAccessToken()
+            println "Token retrieved successfully! (First 10 chars: ${token.take(10)}...)"
+        } catch (Exception e) {
+            println "Failed to get token: ${e.message}"
+        }
+    }
+}

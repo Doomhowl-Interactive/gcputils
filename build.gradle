@@ -1,19 +1,25 @@
 plugins {
     id 'groovy'
     id 'maven-publish'
+    id 'java-gradle-plugin'
+    id "com.gradle.plugin-publish" version "1.2.1"
+    id "com.google.cloud.artifactregistry.gradle-plugin" version "2.2.0"
 }
 
 group = 'com.doomhowl'
-version = '1.0-SNAPSHOT'
+version = '1.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url "artifactregistry://europe-west4-maven.pkg.dev/doomhowl-interactive/public"
+    }
 }
 
 dependencies {
     implementation gradleApi()
     implementation 'org.apache.groovy:groovy:4.0.14'
-    
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine'
@@ -21,4 +27,45 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+gradlePlugin {
+    plugins {
+        gcpUtilsPlugin {
+            id = 'com.doomhowl.gcputils'
+            implementationClass = 'com.doomhowl.gcputils.GcpUtilsPlugin'
+            displayName = 'GCP Utilities Plugin'
+            description = 'Gradle plugin providing utilities for Google Cloud Platform integration'
+            tags.set(['gcp', 'google-cloud-platform', 'maven'])
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'gcputils'
+            
+            pom {
+                name = 'GCP Utilities Plugin'
+                description = 'Gradle plugin providing utilities for Google Cloud Platform integration'
+                url = 'https://github.com/doomhowl/gcputils'
+                developers {
+                    developer {
+                        id = 'doomhowl'
+                        name = 'Doomhowl Interactive'
+                        email = 'doomhowl.interactive@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+    
+    repositories {
+        mavenLocal()
+        maven {
+            url "artifactregistry://europe-west4-maven.pkg.dev/doomhowl-interactive/public"
+        }
+    }
 }
