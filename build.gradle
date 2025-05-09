@@ -1,0 +1,44 @@
+buildscript {
+    dependencies {
+        classpath files('build/classes/groovy/main')
+    }
+}
+
+// You can build the project and publish it to your local Maven repository
+// with the following command:
+// ./gradlew publishToMavenLocal
+
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+}
+
+group = 'com.doomhowl'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation 'org.apache.groovy:groovy:4.0.14'
+    
+    // JUnit 5 dependencies
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+// Configure the publishing of the plugin
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
